@@ -1,20 +1,43 @@
 import React from "react";
 
+import {Track} from '../Track/Track'
+
 import './TrackList.css';
 
 
-class TrackList extends React.Component {
+export class TrackList extends React.Component {
 
 
     render () {
+        
+        const {
+            tracks,
+            onAdd,
+            onRemove,
+            isRemoval
+        } =this.props;
+
         return (
+           
             <div className="TrackList">
-                
-                {/* <!-- You will add a map method that renders a set of Track components  --> */}
+
+                {
+                    tracks.map(track => (
+                        <Track 
+                            key={track.id} 
+                            trackInfo={track} 
+                            onAdd={onAdd}
+                            onRemove={onRemove}
+                            isRemoval={isRemoval}/>
+                    ))
+                }
+
+{/* My logics: Using .map() to render the tracks in the searck results will 
+return an array of Track items, passing the track info to each one as a prop
+will make the information avalable for use in Track.js where I will set the
+key and all the rest*/}
             </div>
         );
     }
     
 };
-
-export default TrackList;
