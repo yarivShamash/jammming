@@ -32,6 +32,9 @@ export const Spotify = {
                     }
                 }
                 getData();
+/* Sadly this did not work as well. At first it gave me an error regarding the 
+CORS so I looked up in stack overflow for solutions and came up with the proxyurl
+but still no response*/
             }
             
         }
@@ -81,4 +84,6 @@ Access to XMLHttpRequest at 'https://accounts.spotify.com/authorize?client_id=
 scope=user-read-private%20user-read-email&response_type=token&state=ngjr3'
 from origin 'http://localhost:3000' has been blocked by CORS policy:
 No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+
  */
