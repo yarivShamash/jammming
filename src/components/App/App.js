@@ -1,13 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import './App.css';
 
 import {SearchBar} from '../SearchBar/SearchBar';
 import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
+import {Spotify} from '../../util/Spotify'
 
-
+Spotify.getUserAccessToken();
 export class App extends React.Component {
 
     constructor(props){
@@ -15,23 +15,23 @@ export class App extends React.Component {
 
         this.state = {
             searchResults: [
-                { name: 'Besame', artist: 'Chico', album: 'Sonrisas', id: 1 },
-                { name: 'Never', artist: 'Willy', album: 'Babilon', id: 2 }, 
-                { name: 'Always', artist: 'Koko', album: 'Amsterdam', id: 3 }
+                { name: 'Besame', artist: 'Chico', album: 'Sonrisas', id: 1, uri: 'lkjf45' },
+                { name: 'Never', artist: 'Willy', album: 'Babilon', id: 2, uri: 'lkjn95' }, 
+                { name: 'Always', artist: 'Koko', album: 'Amsterdam', id: 3, uri: 'lkjf65' }
             ],
             playlistName: 'Yabadabadu',
             playlistTracks: [
-                { name: 'Theme Song', artist: 'Flintstones', album: 'The Rock', id: 4},
-                { name: 'Fred Rocks', artist: 'Flintstones', album: 'The Rock', id: 5},
-                { name: 'Barney PopStar', artist: 'Flintstones', album: 'The Rock', id: 6}
+                { name: 'Theme Song', artist: 'Flintstones', album: 'The Rock', id: 4, uri: 'lkj9l5'},
+                { name: 'Fred Rocks', artist: 'Flintstones', album: 'The Rock', id: 5, uri: 'lkpo15'},
+                { name: 'Barney PopStar', artist: 'Flintstones', album: 'The Rock', id: 6, uri: 'lkj7e5'}
             ]
         }
 
         this.addTrack = this.addTrack.bind(this);
-
         this.removeTrack = this.removeTrack.bind(this);
-        
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
+        this.savePlaylist = this.savePlaylist.bind(this);
+        this.search = this.search.bind(this);
     }
 
     addTrack(track){
@@ -68,6 +68,17 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         })
     }
 
+    savePlaylist(){
+        
+        const tracksURI = this.state.playlistTracks.map(track => track.uri);
+
+    }
+    /*Spotify URI: spotify:track:6rqhFgbbKwnb9MLmUQDhG6 */
+
+    search(searchTerm){
+        console.log(searchTerm);
+    }
+
     render() {
 
         const {
@@ -82,19 +93,22 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
                 
                 <div className="App">
                     
-                    <SearchBar />
+                    <SearchBar 
+                        onSearch={this.search}/>
 
                     <div className="App-playlist">
                     
                         <SearchResults 
                             searchResults={searchResults} 
-                            onAdd={this.addTrack}/>
+                            onAdd={this.addTrack}
+                            />
                         
                         <Playlist 
                             playlistName={playlistName} 
                             playlistTracks={playlistTracks}
                             onRemove={this.removeTrack}
-                            onNameChange={this.updatePlaylistName}/>
+                            onNameChange={this.updatePlaylistName}
+                            onSave={this.savePlaylist}/>
                     
                     </div>
                 </div>
@@ -103,5 +117,3 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
     }
 };
 
-
-ReactDOM.render(<App />, document.getElementById('app'));

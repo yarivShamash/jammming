@@ -21,7 +21,8 @@ export class Playlist extends React.Component {
 
         const {
             playlistTracks,
-            onRemove
+            onRemove,
+            onSave
         } = this.props;
         
         return (
@@ -38,7 +39,8 @@ export class Playlist extends React.Component {
 
                 <a 
                 className="Playlist-save" 
-                href="www.#.com">SAVE TO SPOTIFY</a>
+                href="www.#.com"
+                onClick={onSave}>SAVE TO SPOTIFY</a>
             </div>
         );
     };
