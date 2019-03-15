@@ -7,7 +7,8 @@ import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
 import {Spotify} from '../../util/Spotify'
 
-Spotify.getUserAccessToken();
+// Spotify.getUserAccessToken();
+
 export class App extends React.Component {
 
     constructor(props){
@@ -72,11 +73,26 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         
         const tracksURI = this.state.playlistTracks.map(track => track.uri);
 
+        Spotify.savePlaylist(this.state.playlistName, tracksURI); /*Saving the new Playlist to Spotify */
+        this.setState({playlistName: 'New Playlist'});/*Resetting the playlist name */
+        this.setState({playlistTracks: [] }); /*Resetting playlist Tracks */
+
     }
-    /*Spotify URI: spotify:track:6rqhFgbbKwnb9MLmUQDhG6 */
+
 
     search(searchTerm){
-        console.log(searchTerm);
+        
+        Spotify.search(searchTerm).then(
+            tracks => {this.setState({
+                searchResults: tracks
+            })}); //this also did not work..
+        
+        /*const results = Spotify.search(searchTerm);
+        this.setState({
+            searchResults: results
+        });
+        console.log(results);
+        it did not work..*/
     }
 
     render() {

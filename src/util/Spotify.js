@@ -1,89 +1,128 @@
-let UserAccessToken = null;
+let userAccessToken = '';
 
 const url = 'https://accounts.spotify.com/authorize';
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
+// const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
 const ClientID = '0ef05acd1d204d45901fd22d4624dbe8';
 /*This is the Client ID I got from Spotify when I registered the app */
 
-const redirect_uri = 'https://example.com/';
-/*Required. The URI to redirect to after the user 
-grants/denies permission. This URI needs to be entered in the URI whitelist 
-that you specify when you register your application. 
-I used this uri as a placeholder since I did not know what else to use*/
+const redirect_uri = 'http://localhost:3000/';
+/*Required. The URI to redirect to after the user grants/denies permission.
+This URI needs to be entered in the URI whitelist that you specify when you 
+register your application. */
+
+const responseType = 'token';
+/*The API suggested to set it to 'token' */
+
+const scope = 'playlist-modify-public';
+/*This scope lets you write access to a user's private playlist */
+
+const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirect_uri}`;
 
 export const Spotify = {
     getUserAccessToken: () =>{
-        if(UserAccessToken){
-            return UserAccessToken;
-            } else {
-                const endPoint = `${url}?client_id=${ClientID}&redirect_uri=${redirect_uri}&scope=user-read-private%20user-read-email&response_type=token&state=ngjr3`
-                async function getData(){
-                    try{
-                        const response = await fetch(proxyurl + endPoint);
-                        if (response.ok){
-                            const jsonResponse = await response.json();
-                            console.log(jsonResponse);
-                        }
-                        throw new Error('Request failed!');
-
-                    } catch(error) {
-                        console.log(error + 'No way Jose! :(');
-                    }
-                }
-                getData();
-/* Sadly this did not work as well. At first it gave me an error regarding the 
-CORS so I looked up in stack overflow for solutions and came up with the proxyurl
-but still no response*/
-            }
+        if(userAccessToken){
+            return userAccessToken;
+        }else if (
+            window.location.href.match(/access_token=([^&]*)/) && /*returns an array with the item access_token=<whatever it is set to> untill the '&' sign*/
+            window.location.href.match(/expires_in=([^&]*)/) /*returns an array with the item expires_in=<whatever it is set to> untill the '&' sign*/
+            ) {
             
-        }
-    };
+            let userAccessToken = window.location.href.match(/access_token=([^&]*)/)[1];
+            let expiresIn = window.location.href.match(/expires_in=([^&]*)/)[1];
+            
+            window.setTimeout(() => (userAccessToken = ''), expiresIn * 1000);
+            window.history.pushState('Access Token', null, '/');
+            
+            console.log(userAccessToken);
+            
+            return userAccessToken;
+          } else {
+            window.location = endPoint;
+          }
+         
+        },
+    
+    search(term){
+      let userAccessToken = this.getUserAccessToken();
+      
+      if (!userAccessToken){
+        console.log('No Access Token.');
+        return;
+      };
 
+      const mainTerm = encodeURI(term); /* this converts the term passed as a parameter to a URI format */
+      
+      return fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
+        headers: {Authorization: `Bearer ${userAccessToken}`}
+      })
+      .then(response => {
+          if(response.ok){
+              return response.json()
+          }
+          throw new Error('Request failed');
+      },networkError => console.log(networkError.message)
+      ).then(jsonResponse => {
+          if (jsonResponse){
+            
+            jsonResponse.tracks.items.map(track => ({
+              
+                id: track.id,
+                name: track.name,
+                artist: track.artist[0].name,
+                album: track.album.name,
+                uri: track.uri //this was problematic for some reason..
+              }))
+          
+          } else {
+            return [];
+          }
+      })
+    },
 
-/*
-Things I tried and did not work out:
-In getUserAccessToken, after the if(UserAccessToken), in the else part, I tried 
-to connect to the Spotify API using fetch in this way: 
+    savePlaylist(playlistName, trackURI){
+      if (!playlistName && !trackURI.length){
+        return;
+      }
 
-const endPoint = `${url}?client_id=${ClientID}&redirect_uri=${redirect_uri}&scope=user-read-private%20user-read-email&response_type=token&state=ngjr3`
-
-fetch(endPoint)
-.then(response => {
-    if(response.ok){
+      const userAccessToken = this.getUserAccessToken();
+      const headers = {Authorization: `Bearer ${userAccessToken}`};
+      let userID;
+      
+      /*This fetch is set to GET the user's ID */
+      return fetch('https://api.spotify.com/v1/me', {
+        headers: headers
+      }).then(response => {
+      if (response.ok) {
         return response.json()
-    }
-    throw new Error('Request failed');
-},networkError => console.log(networkError.message)
-).then(jsonResponse => {
-    console.log(jsonResponse);
-})
+      }
+      throw new Error('Request Failed!');
+      }, networkError => console.log(networkError.message)
+      ).then(jsonResponse => {
+        userID = jsonResponse.id;
+        
+        /*This fetch is set to POST creates a new playlist in the user’s account and returns a playlist ID */
+        return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify({name: playlistName})
 
-I got an error to the console saying "Failed to fetch". I tried removing the
-state=ngjr3 at the end but it did not work as well.
+          }).then(response => {
+          if (response.ok) {
+            return response.json()
+          }
+          throw new Error('Request Failed!');
+          }, networkError => console.log(networkError.message)
+          ).then(jsonResponse => {
+            const playlistId = jsonResponse.id;
 
-TAKE #2 on the same thing, tried the XMLHttpRequest:
-
- const xhr = new XMLHttpRequest();
-                const endPoint = `${url}?client_id=${ClientID}&redirect_uri=${redirect_uri}&scope=user-read-private%20user-read-email&response_type=token&state=ngjr3`
-
-                xhr.responseType = 'json';
-                xhr.onreadystatechange = () =>{
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        console.log(xhr.status);
-                    }
-                };
-
-                xhr.open('GET', endPoint);
-                xhr.send();
-
-and got this:
-
-Access to XMLHttpRequest at 'https://accounts.spotify.com/authorize?client_id=
-0ef05acd1d204d45901fd22d4624dbe8&redirect_uri=https://github.com/jammming&
-scope=user-read-private%20user-read-email&response_type=token&state=ngjr3'
-from origin 'http://localhost:3000' has been blocked by CORS policy:
-No 'Access-Control-Allow-Origin' header is present on the requested resource.
-
-
- */
+            /*This fetch is to POST the track URIs*/
+            return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistId}/tracks`, {
+              headers: headers,
+              method: 'POST',
+              body: JSON.stringify({uris: trackURI})
+            });
+          });
+        });
+      }
+};
