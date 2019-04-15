@@ -44,6 +44,29 @@ h2 {
   width: 100%;
 }
 
+.App .Start-Jammming {
+  position: relative;
+  padding-top: 5%; 
+  display: flex;
+  justify-content: center;
+}
+
+.App .Start-Jammming a {
+  cursor: pointer;
+  width: 14rem;
+  height: 4rem;
+  padding: 1rem 0;
+  border-radius: 54px;
+  background-color: rgba(0, 165, 50, .7);
+  text-align: center;
+  font-size: 2rem;
+  transition: background-color .25s;
+}
+
+.App .Start-Jammming a:hover {
+  background-color: rgba(108, 65, 233, .7);
+}
+
 @media only screen and (max-width: 1020px) {
   .App-playlist {
     align-items: center;

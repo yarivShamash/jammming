@@ -27,8 +27,6 @@ export class Track extends React.Component{
         const {
             trackInfo,
             isRemoval,
-            removeTrack,
-            addTrack,
              
         } = this.props;
 
@@ -48,12 +46,12 @@ here to render. Hoping each time it renders something different. */
                         
                             ? <a 
                             className="Track-action" 
-                            onClick={removeTrack} 
-                            href="www.#.com">-</a>
+                            onClick={this.removeTrack} 
+                            /*href="www.#.com"*/>-</a>
 
                             : <a className="Track-action"
-                                 onClick={addTrack} 
-                                 href="www.#.com">+</a>
+                                 onClick={this.addTrack} 
+                                 /*href="www.#.com"*/>+</a>
                     }
             </div>
         );

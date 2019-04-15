@@ -32,7 +32,7 @@ export class TrackList extends React.Component {
                     ))
                 }
 
-                {/* My logics: Using .map() to render the tracks in the searck results will 
+                {/* My logics: Using .map() to render the tracks in the Track List will 
                 return an array of Track items, passing the track info to each one as a prop
                 will make the information avalable for use in Track.js where I will set the
                 key and all the rest*/}

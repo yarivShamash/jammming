@@ -15,17 +15,9 @@ export class App extends React.Component {
         super(props);
 
         this.state = {
-            searchResults: [
-                { name: 'Besame', artist: 'Chico', album: 'Sonrisas', id: 1, uri: 'lkjf45' },
-                { name: 'Never', artist: 'Willy', album: 'Babilon', id: 2, uri: 'lkjn95' }, 
-                { name: 'Always', artist: 'Koko', album: 'Amsterdam', id: 3, uri: 'lkjf65' }
-            ],
-            playlistName: 'Yabadabadu',
-            playlistTracks: [
-                { name: 'Theme Song', artist: 'Flintstones', album: 'The Rock', id: 4, uri: 'lkj9l5'},
-                { name: 'Fred Rocks', artist: 'Flintstones', album: 'The Rock', id: 5, uri: 'lkpo15'},
-                { name: 'Barney PopStar', artist: 'Flintstones', album: 'The Rock', id: 6, uri: 'lkj7e5'}
-            ]
+            searchResults: [],
+            playlistName: 'New Playlist',
+            playlistTracks: []
         }
 
         this.addTrack = this.addTrack.bind(this);
@@ -35,6 +27,7 @@ export class App extends React.Component {
         this.search = this.search.bind(this);
     }
 
+    
     addTrack(track){
 
         const { playlistTracks } = this.state
@@ -73,10 +66,12 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         
         const tracksURI = this.state.playlistTracks.map(track => track.uri);
 
-        Spotify.savePlaylist(this.state.playlistName, tracksURI); /*Saving the new Playlist to Spotify */
-        this.setState({playlistName: 'New Playlist'});/*Resetting the playlist name */
-        this.setState({playlistTracks: [] }); /*Resetting playlist Tracks */
-
+        Spotify.savePlaylist(this.state.playlistName, tracksURI).then(() => {
+            this.setState({
+                playlistName: 'New Playlist',/*Resetting the playlist name */
+                playlistTracks: [] /*Resetting playlist Tracks */
+            });
+        });/*Saving the new Playlist to Spotify */ 
     }
 
 
@@ -85,7 +80,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         Spotify.search(searchTerm).then(
             tracks => {this.setState({
                 searchResults: tracks
-            })}); //this also did not work..
+            })});
         
         /*const results = Spotify.search(searchTerm);
         this.setState({
@@ -105,9 +100,14 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
 
         return (
             <div>
+
+                {alert('Welcome to Jammming, the Spotify Playlist Maker App! To use this App first press the "Start Jammming" button twice.. \n ..and enjoy Playlisting :)')}
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
                 <div className="App">
+                    <div className="Start-Jammming">
+                        <a onClick={Spotify.getUserAccessToken}>Start Jammming!</a>
+                    </div>
                     
                     <SearchBar 
                         onSearch={this.search}/>
