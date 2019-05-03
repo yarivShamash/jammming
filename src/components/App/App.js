@@ -33,10 +33,6 @@ export class App extends React.Component {
         const { playlistTracks } = this.state
 
         const hasTrack = playlistTracks.find(savedTrack => savedTrack.id === track.id)
-/*the above logic will compare between the id of the passed track argument and 
-the id of each track in the playlistTracks array and return true if the .find()
-method does not return 'undefined'. Only then will it setState using the Spread
-operator, the meaning of the code is keep 'this.state.playlistTracks' and add 'track' */
 
         if (hasTrack){
             return;             
@@ -45,6 +41,10 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
             playlistTracks: [...playlistTracks, track]
         })
 
+        /*the above logic will compare between the id of the passed track argument and 
+the id of each track in the playlistTracks array and return true if the .find()
+method does not return 'undefined'. Only then will it setState using the Spread
+operator, the meaning of the code is keep 'this.state.playlistTracks' and add 'track' */
     }
 
     removeTrack(track){

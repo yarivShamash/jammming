@@ -44,10 +44,11 @@ export const Spotify = {
          
         },
     
-    search(term){
-      // let userAccessToken = this.getUserAccessToken();
-      // I commented this out becaues it is already defined in 
-      // the global of this file
+        /*the search(term) method appearently returns undefined.. Browser writes:
+        Tracklist.js, cannot read property 'map' of undefined, and pointing on the
+        traks of the TrackList.. I couldn't understand why.*/
+    async search (term) {
+      /* let userAccessToken = this.getUserAccessToken();   I commented this out becaues it is already defined in the global of this file*/
 
       if (!userAccessToken){
         console.log('No Access Token.');
@@ -56,31 +57,44 @@ export const Spotify = {
 
       const mainTerm = encodeURI(term); // this converts the term passed as a parameter to a URI format
       
-      return fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
+      
+      try {
+        const response =  await fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
         headers: {Authorization: `Bearer ${userAccessToken}`}
       })
-      .then(response => {
-          if(response.ok){
+      
+      const jsonifyResponse = async (response) => {
+
+        let responseOK = await response.ok;
+
+          if(responseOK){
               return response.json()
           }
           throw new Error('Request failed');
-      },networkError => console.log(networkError.message)
-      ).then(jsonResponse => {
-          if (!jsonResponse.tracks){
-            return [];
-          }
+      }
+      const jsonResponse = await jsonifyResponse(response);
 
-          console.log(jsonResponse);
-          return jsonResponse.tracks.items.map(track => ({
+      let responseTracks = await jsonResponse.tracks;
+      
+      if (!responseTracks){
+        return [];
+      }
 
-                id: track.id,
-                name: track.name,
-                artist: track.artists[0].name,
-                album: track.album.name,
-                uri: track.uri 
-            }));
-            
-          });
+
+      return jsonResponse.tracks.items.map(track => ({
+
+            id: track.id,
+            name: track.name,
+            artist: track.artists[0].name,
+            album: track.album.name,
+            uri: track.uri 
+        }));
+    } 
+      
+      catch(networkError){
+        console.log(networkError.message)
+      } 
+          
     },
 
 
@@ -95,11 +109,6 @@ export const Spotify = {
       
       const headers = {Authorization: `Bearer ${userAccessToken}`};
       let userID;
-
-      // return {}
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => { resolve() }, 5000)
-      // })
       
       /*This fetch is set to GET the user's ID */
       return fetch('https://api.spotify.com/v1/me', {
