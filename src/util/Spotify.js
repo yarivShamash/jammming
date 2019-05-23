@@ -102,7 +102,7 @@ export const Spotify = {
           album: track.album.name,
           uri: track.uri 
       }));
-      }
+      };
 
       searchResults();
       
