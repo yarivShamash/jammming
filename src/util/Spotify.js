@@ -56,10 +56,11 @@ export const Spotify = {
       let response;
       let JSONResponse;
       let error;
+      let mappedTracks;
 
       if (!userAccessToken){
         console.log('No Access Token.');
-        return;
+        return ;
       };
       
       //The code below tries to contact Spotifies API
@@ -81,23 +82,32 @@ export const Spotify = {
 
       try{
         JSONResponse = await response.json();
+
       } catch (err){
         error = new Error(`Fail to read response, while ${topic}.`);
         return Promise.reject(error);
       }
 
-      if (!JSONResponse.tracks){
-        return [];
-      }
-        //where should I place the 7 lines beloww???
-      return JSONResponse.tracks.items.map(track => ({
+      
+      let searchResults =  () => {
 
-        id: track.id,
-        name: track.name,
-        artist: track.artists[0].name,
-        album: track.album.name,
-        uri: track.uri 
-    }));
+        if (!JSONResponse.tracks){
+          mappedTracks =  [];
+        }
+        mappedTracks = JSONResponse.tracks.items.map(track => ({
+
+          id: track.id,
+          name: track.name,
+          artist: track.artists[0].name,
+          album: track.album.name,
+          uri: track.uri 
+      }));
+      }
+
+      searchResults();
+      
+
+      return Promise.resolve(mappedTracks);
     },
 
 
