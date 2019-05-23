@@ -1,7 +1,0 @@
-I chose to implement Pressing Enter to Search.
-
-This is the link to the doc:
-
-https://docs.google.com/document/d/1xtqL-pYovtz1jFr--HVdffIkw68Cp0O_qqwTpSC1uYk/edit?usp=sharing
-
-The method was also updated to SearchBar.js.

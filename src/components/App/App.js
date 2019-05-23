@@ -7,7 +7,6 @@ import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
 import {Spotify} from '../../util/Spotify'
 
-// Spotify.getUserAccessToken();
 
 export class App extends React.Component {
 
@@ -33,10 +32,6 @@ export class App extends React.Component {
         const { playlistTracks } = this.state
 
         const hasTrack = playlistTracks.find(savedTrack => savedTrack.id === track.id)
-/*the above logic will compare between the id of the passed track argument and 
-the id of each track in the playlistTracks array and return true if the .find()
-method does not return 'undefined'. Only then will it setState using the Spread
-operator, the meaning of the code is keep 'this.state.playlistTracks' and add 'track' */
 
         if (hasTrack){
             return;             
@@ -45,6 +40,10 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
             playlistTracks: [...playlistTracks, track]
         })
 
+        /*the above logic will compare between the id of the passed track argument and 
+the id of each track in the playlistTracks array and return true if the .find()
+method does not return 'undefined'. Only then will it setState using the Spread
+operator, the meaning of the code is keep 'this.state.playlistTracks' and add 'track' */
     }
 
     removeTrack(track){
@@ -101,7 +100,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         return (
             <div>
 
-                {alert('Welcome to Jammming, the Spotify Playlist Maker App! To use this App first press the "Start Jammming" button twice.. \n ..and enjoy Playlisting :)')}
+                {/* {alert('Welcome to Jammming, the Spotify Playlist Maker App! To use this App first press the "Start Jammming" button twice.. \n ..and enjoy Playlisting :)')} */}
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
                 <div className="App">

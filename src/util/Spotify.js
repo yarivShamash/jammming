@@ -44,43 +44,60 @@ export const Spotify = {
          
         },
     
-    search(term){
-      // let userAccessToken = this.getUserAccessToken();
-      // I commented this out becaues it is already defined in 
-      // the global of this file
+        /*the search(term) method appearently returns undefined.. Browser writes:
+        Tracklist.js, cannot read property 'map' of undefined, and pointing on the
+        traks of the TrackList.. I couldn't understand why.*/
+    async search (term) {
+      
+      const topic = 'Searching Spotify\'s API.'
+
+      const mainTerm = encodeURI(term); // this converts the term passed as a parameter to a URI format
+
+      let response;
+      let JSONResponse;
+      let error;
 
       if (!userAccessToken){
         console.log('No Access Token.');
         return;
       };
-
-      const mainTerm = encodeURI(term); // this converts the term passed as a parameter to a URI format
       
-      return fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
+      //The code below tries to contact Spotifies API
+      try {
+        response =  await fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
         headers: {Authorization: `Bearer ${userAccessToken}`}
-      })
-      .then(response => {
-          if(response.ok){
-              return response.json()
-          }
-          throw new Error('Request failed');
-      },networkError => console.log(networkError.message)
-      ).then(jsonResponse => {
-          if (!jsonResponse.tracks){
-            return [];
-          }
+      })      
+      } catch (e) {
+        error = new Error(`Network error, while ${topic}.`);
+        return Promise.reject(error);
+      }
 
-          console.log(jsonResponse);
-          return jsonResponse.tracks.items.map(track => ({
+      if (!response.ok) {
+        error = new Error(`Server error, status: ${response.status}, while ${topic}.`);
+        return Promise.reject(error);
+      }
 
-                id: track.id,
-                name: track.name,
-                artist: track.artists[0].name,
-                album: track.album.name,
-                uri: track.uri 
-            }));
-            
-          });
+      // The code below will try to convert the response to JSON format
+
+      try{
+        JSONResponse = await response.json();
+      } catch (err){
+        error = new Error(`Fail to read response, while ${topic}.`);
+        return Promise.reject(error);
+      }
+
+      if (!JSONResponse.tracks){
+        return [];
+      }
+        //where should I place the 7 lines beloww???
+      return JSONResponse.tracks.items.map(track => ({
+
+        id: track.id,
+        name: track.name,
+        artist: track.artists[0].name,
+        album: track.album.name,
+        uri: track.uri 
+    }));
     },
 
 
@@ -95,11 +112,6 @@ export const Spotify = {
       
       const headers = {Authorization: `Bearer ${userAccessToken}`};
       let userID;
-
-      // return {}
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => { resolve() }, 5000)
-      // })
       
       /*This fetch is set to GET the user's ID */
       return fetch('https://api.spotify.com/v1/me', {
