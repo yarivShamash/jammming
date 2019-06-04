@@ -19,6 +19,8 @@ const scope = 'playlist-modify-public';
 
 const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
 
+const SPOTIFY_SEARCH_ENDPOINT = 'https://api.spotify.com/v1';
+
 export const Spotify = {
     getUserAccessToken: () =>{
         if(userAccessToken){
@@ -44,28 +46,23 @@ export const Spotify = {
          
         },
     
-        /*the search(term) method appearently returns undefined.. Browser writes:
-        Tracklist.js, cannot read property 'map' of undefined, and pointing on the
-        traks of the TrackList.. I couldn't understand why.*/
     async search (term) {
       
       const topic = 'Searching Spotify\'s API.'
 
-      const mainTerm = encodeURI(term); // this converts the term passed as a parameter to a URI format
+      const searchTermURI = encodeURI(term); // this converts the search term passed as a parameter to a URI format
 
       let response;
       let JSONResponse;
       let error;
-      let mappedTracks;
 
       if (!userAccessToken){
-        console.log('No Access Token.');
-        return ;
+        return Promise.reject(new Error(`${topic} No Access Token. Please perss the "Start Jammming" button twice or confirm connection to your Spotify account.`)).then(()=>{}, error => console.log(error));
       };
       
       //The code below tries to contact Spotifies API
       try {
-        response =  await fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
+        response =  await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/search?type=track&q=${searchTermURI}`, {
         headers: {Authorization: `Bearer ${userAccessToken}`}
       })      
       } catch (e) {
@@ -80,7 +77,7 @@ export const Spotify = {
 
       // The code below will try to convert the response to JSON format
 
-      try{
+      try {
         JSONResponse = await response.json();
 
       } catch (err){
@@ -89,22 +86,17 @@ export const Spotify = {
       }
 
       
-      let searchResults =  () => {
-
-        if (!JSONResponse.tracks){
-          mappedTracks =  [];
-        }
-        mappedTracks = JSONResponse.tracks.items.map(track => ({
+      let mappedTracks = (JSONResponse.tracks && JSONResponse.tracks.items)
+      ? (
+        JSONResponse.tracks.items.map(track => ({
 
           id: track.id,
           name: track.name,
           artist: track.artists[0].name,
           album: track.album.name,
           uri: track.uri 
-      }));
-      };
-
-      searchResults();
+      }))
+      ) : [];
       
 
       return Promise.resolve(mappedTracks);
@@ -124,7 +116,7 @@ export const Spotify = {
       let userID;
       
       /*This fetch is set to GET the user's ID */
-      return fetch('https://api.spotify.com/v1/me', {
+      return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/me`, {
         method: 'GET',
         headers: headers
       })
@@ -133,7 +125,7 @@ export const Spotify = {
         userID = jsonResponse.id;
         
         /*This fetch is set to POST creates a new playlist in the user’s account and returns a playlist ID */
-        return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+        return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists`, {
           headers: headers,
           method: 'POST',
           body: JSON.stringify({name: playlistName})
@@ -144,7 +136,7 @@ export const Spotify = {
             const playlistId = jsonResponse.id
 
             /*This fetch is to POST the track URIs*/
-            return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistId}/tracks`, {
+            return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists/${playlistId}/tracks`, {
               headers: headers,
               method: 'POST',
               body: JSON.stringify({uris: trackURI})

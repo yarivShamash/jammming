@@ -100,7 +100,6 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         return (
             <div>
 
-                {/* {alert('Welcome to Jammming, the Spotify Playlist Maker App! To use this App first press the "Start Jammming" button twice.. \n ..and enjoy Playlisting :)')} */}
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
                 <div className="App">
