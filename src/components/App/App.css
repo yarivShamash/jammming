@@ -26,7 +26,7 @@ h2 {
   font-size: 1.55rem;
 }
 
-.App {
+.app {
   height: 100%;
   padding: 0 17% 10% 17%;
   background-image: url('./background_photo_desktop.jpg');
@@ -38,20 +38,20 @@ h2 {
   color: #fff;
 }
 
-.App-playlist {
+.app-playlist {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.App .Start-Jammming {
+.app .start-jammming {
   position: relative;
   padding-top: 5%; 
   display: flex;
   justify-content: center;
 }
 
-.App .Start-Jammming a {
+.app .start-jammming a {
   cursor: pointer;
   width: 14rem;
   height: 4rem;
@@ -63,12 +63,12 @@ h2 {
   transition: background-color .25s;
 }
 
-.App .Start-Jammming a:hover {
+.app .start-jammming a:hover {
   background-color: rgba(108, 65, 233, .7);
 }
 
 @media only screen and (max-width: 1020px) {
-  .App-playlist {
+  .app-playlist {
     align-items: center;
     flex-direction: column;
   }

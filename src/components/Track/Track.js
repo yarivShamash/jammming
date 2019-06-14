@@ -36,8 +36,8 @@ export class Track extends React.Component{
 After passing the track as an attirbute in TrackList.js I used the info
 here to render. Hoping each time it renders something different. */
             
-            <div className="Track">
-                <div className="Track-information">
+            <div className="track"> {/*a block level element*/}
+                <div className="track__information"> {/*an element level element */}
                     <h3>{trackInfo.name}</h3>
                     <p>{trackInfo.artist} | {trackInfo.album}</p>
                 </div>
@@ -45,14 +45,14 @@ here to render. Hoping each time it renders something different. */
                         isRemoval
                         
                             ? <a 
-                            className="Track-action" 
+                            className="track__action" 
                             onClick={this.removeTrack} 
                             /*href="www.#.com"*/>-</a>
 
-                            : <a className="Track-action"
+                            : <a className="track__action"
                                  onClick={this.addTrack} 
                                  /*href="www.#.com"*/>+</a>
-                    }
+                    } {/*an element level element */}
             </div>
         );
     }

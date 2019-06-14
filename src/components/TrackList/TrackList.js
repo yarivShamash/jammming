@@ -19,7 +19,7 @@ export class TrackList extends React.Component {
 
         return (
            
-            <div className="TrackList">
+            <div className="trackList"> {/*a block level element */}
 
                 {
                     tracks.map(track => (

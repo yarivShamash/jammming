@@ -102,15 +102,15 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
 
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
-                <div className="App">
-                    <div className="Start-Jammming">
+                <div className="app"> {/*a block level element*/}
+                    <div className="start-jammming"> {/*a block level element*/}
                         <a onClick={Spotify.getUserAccessToken}>Start Jammming!</a>
                     </div>
                     
                     <SearchBar 
                         onSearch={this.search}/>
 
-                    <div className="App-playlist">
+                    <div className="app-playlist">
                     
                         <SearchResults 
                             searchResults={searchResults} 
