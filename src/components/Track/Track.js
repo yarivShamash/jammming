@@ -42,17 +42,16 @@ here to render. Hoping each time it renders something different. */
                     <p>{trackInfo.artist} | {trackInfo.album}</p>
                 </div>
                 {
-                        isRemoval
-                        
-                            ? <a 
-                            className="track__action" 
-                            onClick={this.removeTrack} 
-                            /*href="www.#.com"*/>-</a>
+                    isRemoval
+                    
+                        ? <a 
+                        className="track__action" 
+                        onClick={this.removeTrack}>-</a>
 
-                            : <a className="track__action"
-                                 onClick={this.addTrack} 
-                                 /*href="www.#.com"*/>+</a>
-                    } {/*an element level element */}
+                        : <a 
+                        className="track__action"
+                        onClick={this.addTrack}>+</a>
+                } {/*an element level element */}
             </div>
         );
     }

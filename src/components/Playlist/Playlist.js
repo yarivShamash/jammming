@@ -38,7 +38,7 @@ export class Playlist extends React.Component {
                     isRemoval={true}/>
 
                 <a 
-                className="playlist__save" 
+                className="playlist__button" 
                 // href="www.#.com"
                 onClick={onSave}>SAVE TO SPOTIFY</a>
                 

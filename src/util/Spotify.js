@@ -1,3 +1,6 @@
+import { map, get } from 'lodash';
+
+
 let userAccessToken = '';
 
 const url = 'https://accounts.spotify.com/authorize';
@@ -86,19 +89,25 @@ export const Spotify = {
       }
 
       
-      let mappedTracks = (JSONResponse.tracks && JSONResponse.tracks.items)
-      ? (
-        JSONResponse.tracks.items.map(track => ({
+      let JSONTracks = (JSONResponse.tracks && JSONResponse.tracks.items)
+      ? get(JSONResponse, ['tracks', 'items'], [] ) : console.log(`JSONResponse.tracks was not found`);
 
-          id: track.id,
-          name: track.name,
-          artist: track.artists[0].name,
-          album: track.album.name,
-          uri: track.uri 
-      }))
-      ) : [];
+      let mappedTracks = map(JSONTracks, track => ({
+
+        id: track.id,
+        name: track.name,
+        artist: get(track, ['artists', 0, 'name'], 'No artist name'),
+        album: get(track, ['album', 'name'], 'No album name'),
+        uri: track.uri 
+
+    }))
       
 
+        // this is the map method neede to be implied on mapped tracks:
+
+        /**
+          .map())
+         */
       return Promise.resolve(mappedTracks);
     },
 

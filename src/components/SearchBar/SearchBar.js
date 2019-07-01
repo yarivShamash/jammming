@@ -34,12 +34,12 @@ export class SearchBar extends React.Component {
 
 
         return (
-            <div className="searchBar"> {/*an block level element*/}
+            <div className="search-bar"> {/*an block level element*/}
                 <input 
                 placeholder="Enter A Song, Album, or Artist"
                 onChange={this.handleTermChange} 
                 onKeyDown={this.searchWithEnter}/>
-                <a className="searchBar__search" onClick={this.search}>SEARCH</a>
+                <a className="search-bar__button" onClick={this.search}>SEARCH</a>
             </div>
         );
     }
