@@ -84,7 +84,7 @@ export const Spotify = {
         JSONResponse = await response.json();
 
       } catch (err){
-        error = new Error(`Fail to read response, while ${topic}.`);
+        error = new Error(`Fail to convert response to JSON format, while ${topic}.`);
         return Promise.reject(error);
       }
 
@@ -102,55 +102,107 @@ export const Spotify = {
 
     }))
       
-
-        // this is the map method neede to be implied on mapped tracks:
-
-        /**
-          .map())
-         */
       return Promise.resolve(mappedTracks);
     },
 
 
-    savePlaylist(playlistName, trackURI){
-      if (!playlistName || !trackURI.length){
-        return;
-      }
-
-      // const userAccessToken = Spotify.getUserAccessToken(); 
-      // I commented this out becaues it is already defined in 
-      // the global of this file
+    async savePlaylist(playlistName, trackURI){
       
+      const topic = `Saving Playlist to Spotify`;
+
+      let response;
+      let JSONResponse;
+      let error;
       const headers = {Authorization: `Bearer ${userAccessToken}`};
       let userID;
+
+      let playlistId;
+
+      if (!playlistName || !trackURI.length){
+        return Promise.reject(new Error(`${topic} failed. Confirm that the playlist has a name and some songs in it`)).then(()=>{}, error => console.log(error));
+      }
       
-      /*This fetch is set to GET the user's ID */
-      return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/me`, {
-        method: 'GET',
-        headers: headers
-      })
-      .then(response => response.json())
-      .then(jsonResponse => {
-        userID = jsonResponse.id;
+      
+      
+      /*The code below tries to GET the user's ID */
+
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/me`, {
+          method: 'GET',
+          headers: headers
+        })
+      } catch (e) {
+        error = new Error(`Network error, while ${topic}.`);
+        return Promise.reject(error);
+      };
+
+      if (!response.ok) {
+        error = new Error(`Server error, status: ${response.status}, while ${topic}.`);
+        return Promise.reject(error);
+      };
+
+      // JSONifying the response
+      try {
+        JSONResponse = await response.json;
         
-        /*This fetch is set to POST creates a new playlist in the user’s account and returns a playlist ID */
-        return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists`, {
+      } catch (err){
+        error = new Error(`Fail to convert response to JSON format, while ${topic}.`);
+        return Promise.reject(error);
+      }
+
+      try {
+        userID = await JSONResponse.id;
+        console.log(userID); // userID is undefined and causing error status 403.
+      } catch (err){
+        error = new Error(`Fail to save userID, while ${topic}.`);
+        return Promise.reject(error);
+      }
+
+      
+      /*The code below tries to POST a new playlist in the user’s account and returns a playlist ID */
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists`, {
           headers: headers,
           method: 'POST',
           body: JSON.stringify({name: playlistName})
-
           })
-          .then(response => response.json())
-          .then(jsonResponse => {
-            const playlistId = jsonResponse.id
+          
+      } catch (e) {
+        error = new Error(`Network error, while posting the PlaylistID during ${topic}.`);
+        return Promise.reject(error);
+      };
 
-            /*This fetch is to POST the track URIs*/
-            return fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists/${playlistId}/tracks`, {
-              headers: headers,
-              method: 'POST',
-              body: JSON.stringify({uris: trackURI})
-            });
-          });
-        });
+      if (!response.ok) {
+        error = new Error(`Server error, status: ${response.status}, while posting the PlaylistID during ${topic}.`);
+        return Promise.reject(error);
+      };
+
+      // JSONifying the response
+      try {
+        JSONResponse = await response.json;
+      } catch (err){
+        error = new Error(`Fail to convert response to JSON format, while posting the PlaylistID during ${topic}.`);
+        return Promise.reject(error);
+      }
+      try {
+        playlistId = JSONResponse.id;
+      } catch (err){
+        error = new Error(`Fail to save playlistID, while posting the PlaylistID during ${topic}.`);
+        return Promise.reject(error);
+      }
+
+
+       /*The code below tries to POST the track URIs to the above playlist*/
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists/${playlistId}/tracks`, {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify({uris: trackURI})
+          })
+      } catch (e) {
+        error = new Error(`Network error, while posting Track URIs to Playlist during ${topic}.`);
+        return Promise.reject(error);
+      };
+
       }
 };
