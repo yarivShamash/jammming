@@ -16,7 +16,7 @@ export class SearchResults extends React.Component{
 
         return (
             <div className="search-results"> {/*a block level element */}
-                <h2>Results</h2>
+                <h2 className="search-results__heading">Results</h2>
                 
                 <TrackList 
                     tracks={searchResults} 

@@ -39,7 +39,6 @@ export class Playlist extends React.Component {
 
                 <a 
                 className="playlist__button" 
-                // href="www.#.com"
                 onClick={onSave}>SAVE TO SPOTIFY</a>
                 
                 {/*an element level element*/}
