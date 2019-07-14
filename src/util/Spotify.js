@@ -1,7 +1,10 @@
 import { map, get } from 'lodash';
 
 
-let userAccessToken = '';
+export let userAccessToken = '';
+
+
+
 
 const url = 'https://accounts.spotify.com/authorize';
 // const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -20,13 +23,23 @@ const responseType = 'token';
 const scope = 'playlist-modify-public';
 /*This scope lets you write access to a user's private playlist */
 
-const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
+export const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
 
 const SPOTIFY_SEARCH_ENDPOINT = 'https://api.spotify.com/v1';
 
 export const Spotify = {
-    getUserAccessToken: () =>{
+
+    redirect () {
+      if(window.location === endPoint){
+        return
+      } else {
+        window.location = endPoint
+      };
+    },
+
+    getUserAccessToken () {
         if(userAccessToken){
+          console.log(`userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
             return userAccessToken;
         }
         
@@ -40,10 +53,13 @@ export const Spotify = {
 
           window.setTimeout(() => (userAccessToken = ''), expiresIn * 1000);
           window.history.pushState('Access Token', null, '/');// This clears the parameters, allowing us to grab a new access token when it expires.
-            
-            return userAccessToken;
+           
+          console.log(`userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
+          return userAccessToken;
+
           } else {
             window.location = endPoint;
+            // redirects to the URL stored in endPoint
           }
          
         },

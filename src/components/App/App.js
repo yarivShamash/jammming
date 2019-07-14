@@ -2,11 +2,11 @@ import React from "react";
 
 import './App.css';
 
+import {Button} from '../Button/Button'
 import {SearchBar} from '../SearchBar/SearchBar';
 import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
-import {Spotify} from '../../util/Spotify'
-
+import {userAccessToken, Spotify} from '../../util/Spotify';
 
 export class App extends React.Component {
 
@@ -16,7 +16,7 @@ export class App extends React.Component {
         this.state = {
             searchResults: [],
             playlistName: 'New Playlist',
-            playlistTracks: []
+            playlistTracks: [],
         }
 
         this.addTrack = this.addTrack.bind(this);
@@ -73,29 +73,42 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         });/*Saving the new Playlist to Spotify */ 
     }
 
-
     search(searchTerm){
         
         Spotify.search(searchTerm).then(
-            tracks => {this.setState({
+            tracks => {
+                this.setState({
                 searchResults: tracks
-            })});
-        
-        /*const results = Spotify.search(searchTerm);
-        this.setState({
-            searchResults: results
-        });
-        console.log(results);
-        it did not work..*/
+            })
+          }
+        );
     }
+
 
     render() {
 
         const {
             searchResults,
             playlistName,
-            playlistTracks
+            playlistTracks,
         } = this.state;
+        
+        if(!userAccessToken){ 
+            console.log(`App.js userAccessToken is ${userAccessToken}`); // I used this to see if the accesss token does exist at this stage
+            return (
+                <div>
+                     <h1>Ja<span className="highlight">mmm</span>ing</h1>
+                
+                    <div className="app"> {/*a block level element*/}
+                   
+                      <Button />
+
+                    </div>
+                </div>
+            )
+        };
+
+        console.log(`App.js userAccessToken is ${userAccessToken}`); // I used this to see if the accesss token does exist at this stage
 
         return (
             <div>
@@ -103,10 +116,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
                 <div className="app"> {/*a block level element*/}
-                    <div className="start-jammming"> {/*a block level element*/}
-                        <a onClick={Spotify.getUserAccessToken}>Start Jammming!</a>
-                    </div>
-                    
+                   
                     <SearchBar 
                         onSearch={this.search}/>
 
