@@ -2,7 +2,7 @@ import React from "react";
 
 import './App.css';
 
-import {Button} from '../Button/Button'
+import {Button} from '../Button/Button';
 import {SearchBar} from '../SearchBar/SearchBar';
 import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
@@ -94,7 +94,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         } = this.state;
         
         if(!userAccessToken){ 
-            console.log(`App.js userAccessToken is ${userAccessToken}`); // I used this to see if the accesss token does exist at this stage
+            console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So only Button is renderd`); // I used this to see if the accesss token does exist at this stage
             return (
                 <div>
                      <h1>Ja<span className="highlight">mmm</span>ing</h1>
@@ -108,7 +108,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
             )
         };
 
-        console.log(`App.js userAccessToken is ${userAccessToken}`); // I used this to see if the accesss token does exist at this stage
+        console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So we can proceed`); // I used this to see if the accesss token does exist at this stage
 
         return (
             <div>

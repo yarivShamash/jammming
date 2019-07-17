@@ -7,7 +7,11 @@ export class Button extends React.Component {
   componentDidMount() {
 
       if (!userAccessToken) {
-        Spotify.getUserAccessToken()
+        
+        console.log(`Button's UAT before calling the fn: ${userAccessToken}`)
+        Spotify.getUserAccessToken();
+        console.log(`Button's UAT after calling the fn: ${userAccessToken}`);
+
       } 
     }
   render () {

@@ -4,8 +4,6 @@ import { map, get } from 'lodash';
 export let userAccessToken = '';
 
 
-
-
 const url = 'https://accounts.spotify.com/authorize';
 // const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
@@ -39,7 +37,7 @@ export const Spotify = {
 
     getUserAccessToken () {
         if(userAccessToken){
-          console.log(`userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
+          console.log(`Spotify.js userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
             return userAccessToken;
         }
         
@@ -54,7 +52,7 @@ export const Spotify = {
           window.setTimeout(() => (userAccessToken = ''), expiresIn * 1000);
           window.history.pushState('Access Token', null, '/');// This clears the parameters, allowing us to grab a new access token when it expires.
            
-          console.log(`userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
+          console.log(`Spotify.js userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
           return userAccessToken;
 
           } else {
@@ -152,11 +150,6 @@ export const Spotify = {
         error = new Error(`Network error, while ${topic}.`);
         return Promise.reject(error);
       };
-
-      // if (!response.ok) {
-      //   error = new Error(`Server error, status: ${response.status}, while ${topic}.`);
-      //   return Promise.reject(error);
-      // }; // not sure the condition above is needed..
 
       
       /*The code below tries to POST a new playlist in the user’s account and returns a playlist ID */
