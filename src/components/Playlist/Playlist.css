@@ -4,6 +4,7 @@
     align-items: center;
     overflow-y: scroll;
     width: 37%;
+    height: 450px;
     max-height: 950px;
     padding: 2.27rem 1.16rem;
     background-color: rgba(1, 12, 63, 0.7);

@@ -103,6 +103,24 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
                    
                       <Button />
 
+                      <SearchBar 
+                        onSearch={this.search}/>
+
+                    <div className="app-playlist">
+                    
+                        <SearchResults 
+                            searchResults={searchResults} 
+                            onAdd={this.addTrack}
+                            />
+                        
+                        <Playlist 
+                            playlistName={playlistName} 
+                            playlistTracks={playlistTracks}
+                            onRemove={this.removeTrack}
+                            onNameChange={this.updatePlaylistName}
+                            onSave={this.savePlaylist}/>
+
+                        </div>
                     </div>
                 </div>
             )

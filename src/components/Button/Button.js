@@ -18,6 +18,7 @@ export class Button extends React.Component {
 
       return (
         <div className="start-jammming"> {/*a block level element*/}
+        <h1>Press the button and Jammm!</h1> <br></br>
         <a onClick={
           Spotify.getUserAccessToken
           }>Start Jammming!</a>
