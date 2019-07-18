@@ -1,4 +1,4 @@
-.SearchBar {
+.search-bar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,7 +6,7 @@
     margin-bottom: 6.33rem;
   }
   
-  .SearchBar input {
+  .search-bar input {
     width: 287px;
     padding: .88rem 0;
     border: 1px solid #fff;
@@ -17,11 +17,11 @@
     font-size: 1rem;
   }
   
-  .SearchBar input:focus {
+  .search-bar input:focus {
     outline: none;
   }
   
-  .SearchBar a {
+  .search-bar a {
     cursor: pointer;
     width: 8.11rem;
     padding: .77rem 0;
@@ -32,6 +32,6 @@
     transition: background-color .25s;
   }
   
-  .SearchBar a:hover {
+  .search-bar a:hover {
     background-color: rgba(108, 65, 233, .7);
   }

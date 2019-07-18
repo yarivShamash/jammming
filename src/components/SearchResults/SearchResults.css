@@ -1,4 +1,4 @@
-.SearchResults {
+.search-results {
     width: 50%;
     height: 950px;
     overflow-y: scroll;
@@ -13,7 +13,7 @@
   }
   
   @media only screen and (max-width: 1020px) {
-    .SearchResults {
+    .search-results {
       width: 90%;
       margin-bottom: 2rem;
     }

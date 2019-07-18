@@ -26,7 +26,7 @@ export class Playlist extends React.Component {
         } = this.props;
         
         return (
-            <div className="Playlist">
+            <div className="playlist"> {/*a block level element*/}
                 
                 <input 
                     defaultValue={"New Playlist"} 
@@ -38,9 +38,11 @@ export class Playlist extends React.Component {
                     isRemoval={true}/>
 
                 <a 
-                className="Playlist-save" 
+                className="playlist__button" 
                 // href="www.#.com"
                 onClick={onSave}>SAVE TO SPOTIFY</a>
+                
+                {/*an element level element*/}
             </div>
         );
     };

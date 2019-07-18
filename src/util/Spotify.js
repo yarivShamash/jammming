@@ -1,3 +1,6 @@
+import { map, get } from 'lodash';
+
+
 let userAccessToken = '';
 
 const url = 'https://accounts.spotify.com/authorize';
@@ -19,13 +22,14 @@ const scope = 'playlist-modify-public';
 
 const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
 
+const SPOTIFY_SEARCH_ENDPOINT = 'https://api.spotify.com/v1';
+
 export const Spotify = {
     getUserAccessToken: () =>{
         if(userAccessToken){
             return userAccessToken;
         }
         
-        /*Using the below definitions with http://localhost:3000 creates problems because window.location.href evaluates to http://localhost:3000/ */
         let userAccessTokenMatch = window.location.href.match(/access_token=([^&]*)/); /*returns an array with the item access_token=<whatever it is set to> untill the '&' sign*/
         let expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);  /*returns an array with the item expires_in=<whatever it is set to> untill the '&' sign*/
         
@@ -44,99 +48,128 @@ export const Spotify = {
          
         },
     
-        /*the search(term) method appearently returns undefined.. Browser writes:
-        Tracklist.js, cannot read property 'map' of undefined, and pointing on the
-        traks of the TrackList.. I couldn't understand why.*/
     async search (term) {
-      /* let userAccessToken = this.getUserAccessToken();   I commented this out becaues it is already defined in the global of this file*/
+      
+      const topic = 'Searching Spotify\'s API.'
+
+      const searchTermURI = encodeURI(term); // this converts the search term passed as a parameter to a URI format
+
+      let response;
+      let JSONResponse;
+      let error;
 
       if (!userAccessToken){
-        console.log('No Access Token.');
-        return;
+        return Promise.reject(new Error(`${topic} No Access Token. Please perss the "Start Jammming" button twice or confirm connection to your Spotify account.`)).then(()=>{}, error => console.log(error));
       };
-
-      const mainTerm = encodeURI(term); // this converts the term passed as a parameter to a URI format
       
-      
+      //The code below tries to contact Spotifies API
       try {
-        const response =  await fetch(`https://api.spotify.com/v1/search?type=track&q=${mainTerm}`, {
+        response =  await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/search?type=track&q=${searchTermURI}`, {
         headers: {Authorization: `Bearer ${userAccessToken}`}
-      })
-      
-      const jsonifyResponse = async (response) => {
-
-        let responseOK = await response.ok;
-
-          if(responseOK){
-              return response.json()
-          }
-          throw new Error('Request failed');
-      }
-      const jsonResponse = await jsonifyResponse(response);
-
-      let responseTracks = await jsonResponse.tracks;
-      
-      if (!responseTracks){
-        return [];
+      })      
+      } catch (e) {
+        error = new Error(`Network error, while ${topic}.`);
+        return Promise.reject(error);
       }
 
+      if (!response.ok) {
+        error = new Error(`Server error, status: ${response.status}, while ${topic}.`);
+        return Promise.reject(error);
+      }
 
-      return jsonResponse.tracks.items.map(track => ({
+      // The code below will try to convert the response to JSON format
 
-            id: track.id,
-            name: track.name,
-            artist: track.artists[0].name,
-            album: track.album.name,
-            uri: track.uri 
-        }));
-    } 
+      try {
+        JSONResponse = await response.json();
+
+      } catch (err){
+        error = new Error(`Fail to convert response to JSON format, while ${topic}.`);
+        return Promise.reject(error);
+      }
+
       
-      catch(networkError){
-        console.log(networkError.message)
-      } 
-          
+      let JSONTracks = (JSONResponse.tracks && JSONResponse.tracks.items)
+      ? get(JSONResponse, ['tracks', 'items'], [] ) : console.log(`JSONResponse.tracks was not found`);
+
+      let mappedTracks = map(JSONTracks, track => ({
+
+        id: track.id,
+        name: track.name,
+        artist: get(track, ['artists', 0, 'name'], 'No artist name'),
+        album: get(track, ['album', 'name'], 'No album name'),
+        uri: track.uri 
+
+    }))
+      
+      return Promise.resolve(mappedTracks);
     },
 
 
-    savePlaylist(playlistName, trackURI){
-      if (!playlistName || !trackURI.length){
-        return;
-      }
-
-      // const userAccessToken = Spotify.getUserAccessToken(); 
-      // I commented this out becaues it is already defined in 
-      // the global of this file
+    async savePlaylist(playlistName, trackURI){
       
+      const topic = `Saving Playlist to Spotify`;
+
+      let response;
+      let JSONResponse;
+      let error;
       const headers = {Authorization: `Bearer ${userAccessToken}`};
       let userID;
+      let playlistID;
+
+      if (!playlistName || !trackURI.length){
+        return Promise.reject(new Error(`${topic} failed. Confirm that the playlist has a name and some songs in it`)).then(()=>{}, error => console.log(error));
+      }
       
-      /*This fetch is set to GET the user's ID */
-      return fetch('https://api.spotify.com/v1/me', {
-        method: 'GET',
-        headers: headers
-      })
-      .then(response => response.json())
-      .then(jsonResponse => {
-        userID = jsonResponse.id;
-        
-        /*This fetch is set to POST creates a new playlist in the user’s account and returns a playlist ID */
-        return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+      
+      
+      /*The code below tries to GET the user's ID from the spotify API */
+
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/me`, {
+          method: 'GET',
+          headers: headers
+        })
+        .then( response => response.json())
+        .then(JSONResponse => userID = JSONResponse.id)
+
+      } catch (e) {
+        error = new Error(`Network error, while ${topic}.`);
+        return Promise.reject(error);
+      };
+
+      // if (!response.ok) {
+      //   error = new Error(`Server error, status: ${response.status}, while ${topic}.`);
+      //   return Promise.reject(error);
+      // }; // not sure the condition above is needed..
+
+      
+      /*The code below tries to POST a new playlist in the user’s account and returns a playlist ID */
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists`, {
           headers: headers,
           method: 'POST',
           body: JSON.stringify({name: playlistName})
-
           })
           .then(response => response.json())
-          .then(jsonResponse => {
-            const playlistId = jsonResponse.id
+          .then(JSONResponse => playlistID = JSONResponse.id)
+          
+      } catch (e) {
+        error = new Error(`Network error, while posting the PlaylistID during ${topic}.`);
+        return Promise.reject(error);
+      };
 
-            /*This fetch is to POST the track URIs*/
-            return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistId}/tracks`, {
-              headers: headers,
-              method: 'POST',
-              body: JSON.stringify({uris: trackURI})
-            });
-          });
-        });
+
+       /*The code below tries to POST the track URIs to the above playlist*/
+      try {
+        response = await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/users/${userID}/playlists/${playlistID}/tracks`, {
+          headers: headers,
+          method: 'POST',
+          body: JSON.stringify({uris: trackURI})
+          })
+      } catch (e) {
+        error = new Error(`Network error, while posting Track URIs to Playlist during ${topic}.`);
+        return Promise.reject(error);
+      };
+
       }
 };
