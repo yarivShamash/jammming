@@ -30,15 +30,14 @@ export const Spotify = {
     redirect () {
       if(window.location === endPoint){
         return
-      } else {
-        window.location = endPoint
       };
+      window.location = endPoint;
     },
 
     getUserAccessToken () {
         if(userAccessToken){
-          console.log(`Spotify.js userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
-            return userAccessToken;
+          console.log(`Spotify.js userAccessToken: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`) // I used this to see if the accesss token does exist at this stage
+          return userAccessToken;
         }
         
         let userAccessTokenMatch = window.location.href.match(/access_token=([^&]*)/); /*returns an array with the item access_token=<whatever it is set to> untill the '&' sign*/
@@ -52,14 +51,11 @@ export const Spotify = {
           window.setTimeout(() => (userAccessToken = ''), expiresIn * 1000);
           window.history.pushState('Access Token', null, '/');// This clears the parameters, allowing us to grab a new access token when it expires.
            
-          console.log(`Spotify.js userAccessToken is ${userAccessToken}`) // I used this to see if the accesss token does exist at this stage
+          console.log(`Spotify.js userAccessToken: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`) // I used this to see if the accesss token does exist at this stage
           return userAccessToken;
 
-          } else {
-            window.location = endPoint;
-            // redirects to the URL stored in endPoint
-          }
-         
+          };
+
         },
     
     async search (term) {

@@ -17,6 +17,7 @@ export class App extends React.Component {
             searchResults: [],
             playlistName: 'New Playlist',
             playlistTracks: [],
+            hasLoggedIn: false,
         }
 
         this.addTrack = this.addTrack.bind(this);
@@ -26,6 +27,19 @@ export class App extends React.Component {
         this.search = this.search.bind(this);
     }
 
+    componentDidMount() {
+        const { hasLoggedIn } = this.state
+        
+        if (!hasLoggedIn) {
+        //   console.log(`Button's userAccessToken before calling the fn: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`)
+          const hasLoggedIn = Spotify.getUserAccessToken()
+          this.setState({
+            hasLoggedIn,
+          });
+        //   console.log(`Button's userAccessToken after calling the fn: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`);
+  
+        } 
+      };
     
     addTrack(track){
 
@@ -91,10 +105,11 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
             searchResults,
             playlistName,
             playlistTracks,
+            hasLoggedIn,
         } = this.state;
         
-        if(!userAccessToken){ 
-            console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So only Button is renderd`); // I used this to see if the accesss token does exist at this stage
+        if(!hasLoggedIn){ 
+            // console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So only Button is renderd`); // I used this to see if the accesss token does exist at this stage
             return (
                 <div>
                      <h1>Ja<span className="highlight">mmm</span>ing</h1>
@@ -126,7 +141,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
             )
         };
 
-        console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So we can proceed`); // I used this to see if the accesss token does exist at this stage
+        // console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So we can proceed`); // I used this to see if the accesss token does exist at this stage
 
         return (
             <div>
