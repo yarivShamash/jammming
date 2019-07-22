@@ -2,7 +2,7 @@ import React from "react";
 
 import './App.css';
 
-import {WellcomeScreen} from '../WellcomeScreen/WellcomeScreen';
+import {wellcomeScreen} from '../WellcomeScreen/WellcomeScreen';
 import {SearchBar} from '../SearchBar/SearchBar';
 import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
@@ -107,7 +107,7 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
                 <div className="app"> {/*a block level element*/}
-                    <WellcomeScreen />
+                    {wellcomeScreen}
                     <SearchBar
                       onSearch={this.search}/>
                     
