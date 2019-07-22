@@ -9,7 +9,7 @@ const wellcomeScreenElement = () => {
     <div className="start-jammming"> {/*a block level element*/}
     <h2>Wellcome to Jammming!</h2>
     <p>  
-      Jammming is an appififip to create Spotify playlists.<br/>
+      Jammming is an app to create Spotify playlists.<br/>
       To use this app you'll need to approve it over at Spotify.<br/>
       So..<br/>
     </p>
