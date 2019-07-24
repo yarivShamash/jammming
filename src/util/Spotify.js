@@ -120,7 +120,6 @@ export const Spotify = {
       const topic = `Saving Playlist to Spotify`;
 
       let response;
-      let JSONResponse;
       let error;
       const headers = {Authorization: `Bearer ${userAccessToken}`};
       let userID;

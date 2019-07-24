@@ -4,7 +4,7 @@ import './WellcomeScreen.css';
 import {Spotify} from '../../util/Spotify'
 
 
-const wellcomeScreenElement = () => {
+export const WellcomeScreen = () => {
   return (
     <div className="start-jammming"> {/*a block level element*/}
     <h2>Wellcome to Jammming!</h2>
@@ -22,4 +22,4 @@ const wellcomeScreenElement = () => {
   )
 };
 
-export const wellcomeScreen = wellcomeScreenElement();
+// export const wellcomeScreen = wellcomeScreenElement();
