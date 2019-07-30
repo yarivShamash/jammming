@@ -73,3 +73,12 @@ class Track extends React.Component {
 }
 
 export default Track;
+
+Track.propTypes = {
+  onAdd: PropTypes.func,
+  onRemove: PropTypes.func,
+  trackInfo: PropTypes.PropTypes.objectOf(
+    PropTypes.string
+  ).isRequired,
+  isRemoval: PropTypes.bool.isRequired,
+};

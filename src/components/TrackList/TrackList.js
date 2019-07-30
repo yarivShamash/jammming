@@ -31,3 +31,16 @@ const TrackList = (props) => {
 };
 
 export default TrackList;
+
+TrackList.propTypes = {
+  tracks: PropTypes.arrayOf(
+    PropTypes.objectOf(
+      PropTypes.string
+    )
+  ),
+  onAdd: PropTypes.func,
+  onRemove: PropTypes.func,
+  isRemoval: PropTypes.bool.isRequired,
+};
+// onAdd and onRemove at first I added .isRequired but it logged an error saying it's undefined
+// is it because TrackList was not rendered yet?

@@ -51,7 +51,7 @@ export const Spotify = {
           window.setTimeout(() => (userAccessToken = ''), expiresIn * 1000);
           window.history.pushState('Access Token', null, '/');// This clears the parameters, allowing us to grab a new access token when it expires.
            
-          console.log(`Spotify.js userAccessToken: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`) // I used this to see if the accesss token does exist at this stage
+          // console.log(`Spotify.js userAccessToken: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`) // I used this to see if the accesss token does exist at this stage
           return userAccessToken;
 
           };
@@ -72,7 +72,7 @@ export const Spotify = {
         return Promise.reject(new Error(`${topic} No Access Token. Please perss the "Start Jammming" button twice or confirm connection to your Spotify account.`)).then(()=>{}, error => console.log(error));
       };
       
-      //The code below tries to contact Spotifies API
+      //The code below tries to contact Spotifies API and search for the searchTermURI
       try {
         response =  await fetch(`${SPOTIFY_SEARCH_ENDPOINT}/search?type=track&q=${searchTermURI}`, {
         headers: {Authorization: `Bearer ${userAccessToken}`}

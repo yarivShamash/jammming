@@ -28,3 +28,12 @@ const SearchResults = (props) => {
 };
 
 export default SearchResults;
+
+SearchResults.propTypes = {
+  searchResults: PropTypes.arrayOf(
+    PropTypes.objectOf(
+      PropTypes.string
+    )
+  ),
+  onAdd: PropTypes.func.isRequired,
+};
