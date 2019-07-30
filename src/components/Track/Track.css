@@ -2,11 +2,16 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+    padding: 0.3rem;
+    padding-top: 0.5rem;
   }
   
   .track__action {
     cursor: pointer;
     padding: .5rem;
+    border: none;
+    background: none;
+    color: white;
     font-size: 1.05rem;
     transition: color .25s;
   }

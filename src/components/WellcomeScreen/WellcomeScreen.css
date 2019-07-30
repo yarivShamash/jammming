@@ -5,8 +5,8 @@
     background-color: rgba(250, 250, 250, 0.95);
     border: 0.25rem solid grey;
     border-radius: 54px;
-    height: 29rem;
-    width: 50rem;
+    min-height: 29rem;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,9 +36,10 @@
   .start-jammming button {
     cursor: pointer;
     width: 14rem;
-    height: 4rem;
     padding: 1rem 0;
+    border: none;
     border-radius: 54px;
+    margin-bottom: 1rem;
     background-color: rgba(0, 165, 50, .7);
     text-align: center;
     font-size: 2rem;
