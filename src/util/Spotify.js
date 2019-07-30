@@ -21,7 +21,7 @@ const responseType = 'token';
 const scope = 'playlist-modify-public';
 /*This scope lets you write access to a user's private playlist */
 
-export const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
+const endPoint = `${url}?client_id=${ClientID}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectURI}`;
 
 const SPOTIFY_SEARCH_ENDPOINT = 'https://api.spotify.com/v1';
 
@@ -177,3 +177,5 @@ export const Spotify = {
 
       }
 };
+
+export default Spotify;

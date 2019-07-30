@@ -1,48 +1,53 @@
-import React from "react";
-
-
+import React from 'react';
 import './Playlist.css';
+import TrackList from '../TrackList/TrackList';
 
-import {TrackList} from '../TrackList/TrackList';
+class Playlist extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleNameChange = this.handleNameChange.bind(this);
+  }
 
-export class Playlist extends React.Component {
+  handleNameChange(event) {
+    const {
+      onNameChange
+    } = this.props;
 
-    constructor(props){
-        super(props);
-        this.handleNameChange = this.handleNameChange.bind(this);
-    }
+    const playlistNewName = event.target.value;
+    onNameChange(playlistNewName);
+  }
 
-    handleNameChange(event){
-        const playlistNewName = event.target.value; /**not sure if that's rigth */
-        this.props.onNameChange(playlistNewName);
-    }
+  render() {
+    const {
+      playlistTracks,
+      onRemove,
+      onSave
+    } = this.props;
 
-    render () {
+    return (
+      <div className="playlist">
 
-        const {
-            playlistTracks,
-            onRemove,
-            onSave
-        } = this.props;
-        
-        return (
-            <div className="playlist"> {/*a block level element*/}
-                
-                <input 
-                    defaultValue={"New Playlist"} 
-                    onChange={this.handleNameChange}/>
-                
-                <TrackList 
-                    tracks={playlistTracks} 
-                    onRemove={onRemove}
-                    isRemoval={true}/>
+        <input
+          defaultValue="New Playlist"
+          onChange={this.handleNameChange}
+        />
 
-                <a 
-                className="playlist__button" 
-                onClick={onSave}>SAVE TO SPOTIFY</a>
-                
-                {/*an element level element*/}
-            </div>
-        );
-    };
-};
+        <TrackList
+          tracks={playlistTracks}
+          onRemove={onRemove}
+          isRemoval={true}
+        />
+
+        <button
+          type="button"
+          className="playlist__button"
+          onClick={onSave}
+        >
+        SAVE TO SPOTIFY
+        </button>
+      </div>
+    );
+  }
+}
+
+export default Playlist;

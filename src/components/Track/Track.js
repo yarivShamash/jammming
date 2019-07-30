@@ -1,58 +1,75 @@
-import React from "react";
-
+import React from 'react';
+import PropTypes from 'prop-types'
 import './Track.css';
 
 
-export class Track extends React.Component{
+class Track extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props){
-        super(props);
+    this.addTrack = this.addTrack.bind(this);
+    this.removeTrack = this.removeTrack.bind(this);
+  }
 
-        this.addTrack = this.addTrack.bind(this);
-        this.removeTrack = this.removeTrack.bind(this);
-    }
+  addTrack() {
+    const {
+      onAdd,
+      trackInfo,
+    } = this.props;
+
+    onAdd(trackInfo);
+  }
+
+  removeTrack() {
+    const {
+      onRemove,
+      trackInfo,
+    } = this.props;
+
+    onRemove(trackInfo);
+  }
+
+  render() {
+    const {
+      trackInfo,
+      isRemoval,  
+    } = this.props;
 
 
-    addTrack(){
-        this.props.onAdd(this.props.trackInfo);
-    }
-    /*Step 45: Create an .addTrack() method in the Track component.
-     Use it to add this.props.trackInfo to the playlist. */
+    return (
+      <div className="track">
+        <div className="track__information">
+          <h3>{trackInfo.name}</h3>
+          <p>
+            {trackInfo.artist}
+            |
+            {trackInfo.album}
+          </p>
+        </div>
+        {
+          isRemoval
+            ? (
+              <button
+                type="button"
+                className="track__action"
+                onClick={this.removeTrack}
+              >
+                -
+              </button>
+            )
+            : (
+              <button
+                type="button"
+                className="track__action"
+                onClick={this.addTrack}
+              >
+              +
+              </button>
+            )
+        }
+      </div>
+    );
+  }
+}
 
-     removeTrack() {
-         this.props.onRemove(this.props.trackInfo)
-     }
-
-    render (){
-        const {
-            trackInfo,
-            isRemoval,
-             
-        } = this.props;
-
-
-        return (
-/*Step 35: Render the track name, artist, and album.
-After passing the track as an attirbute in TrackList.js I used the info
-here to render. Hoping each time it renders something different. */
-            
-            <div className="track"> {/*a block level element*/}
-                <div className="track__information"> {/*an element level element */}
-                    <h3>{trackInfo.name}</h3>
-                    <p>{trackInfo.artist} | {trackInfo.album}</p>
-                </div>
-                {
-                    isRemoval
-                    
-                        ? <a 
-                        className="track__action" 
-                        onClick={this.removeTrack}>-</a>
-
-                        : <a 
-                        className="track__action"
-                        onClick={this.addTrack}>+</a>
-                } {/*an element level element */}
-            </div>
-        );
-    }
-};
+export default Track;

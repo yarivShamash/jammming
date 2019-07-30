@@ -1,28 +1,30 @@
-import React from "react";
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import './SearchResults.css';
 
-import {TrackList} from '../TrackList/TrackList';
+import TrackList from '../TrackList/TrackList';
 
-export class SearchResults extends React.Component{
+const SearchResults = (props) => {
+  const {
+    searchResults,
+    onAdd,
+  } = props;
 
+  return (
+    <div className="search-results">
+      <h2
+        className="search-results__heading"
+      >
+      Results
+      </h2>
 
-    render () {
-
-        const {
-            searchResults,
-            onAdd
-        } = this.props;
-
-        return (
-            <div className="search-results"> {/*a block level element */}
-                <h2 className="search-results__heading">Results</h2>
-                
-                <TrackList 
-                    tracks={searchResults} 
-                    onAdd={onAdd} 
-                    isRemoval={false}/>
-            </div>
-        );
-    };
+      <TrackList
+        tracks={searchResults}
+        onAdd={onAdd}
+        isRemoval={false}
+      />
+    </div>
+  );
 };
+
+export default SearchResults;

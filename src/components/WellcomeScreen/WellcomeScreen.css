@@ -33,7 +33,7 @@
     text-align: center;
   }
 
-  .start-jammming a {
+  .start-jammming button {
     cursor: pointer;
     width: 14rem;
     height: 4rem;
@@ -45,6 +45,6 @@
     transition: background-color .25s;
   }
   
-  .start-jammming a:hover {
+  .start-jammming button:hover {
     background-color: rgba(108, 65, 233, .7);
   }

@@ -1,46 +1,73 @@
-import React from "react";
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import './SearchBar.css';
 
 
-export class SearchBar extends React.Component {
-    constructor(props){
-        super(props);
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-        this.search = this.search.bind(this);
-        this.handleTermChange = this.handleTermChange.bind(this);
-        this.searchWithEnter = this.searchWithEnter.bind(this);
+    this.state = {
+      term: '',
+    };
+
+    this.search = this.search.bind(this);
+    this.handleTermChange = this.handleTermChange.bind(this);
+    this.searchWithEnter = this.searchWithEnter.bind(this);
+  }
+
+  handleTermChange(e) {
+    this.setState({
+      term: e.target.value,
+    });
+  }
+
+  search() {
+    const {
+      onSearch,
+    } = this.props;
+
+    const {
+      term,
+    } = this.state;
+
+    onSearch(term);
+  }
+
+  searchWithEnter(event) {
+    if (event.keyCode === 13) {
+      this.search();
     }
+  }
 
-    handleTermChange(e){
-        this.setState({
-            term: e.target.value
-        })
-    }
-    
-    /*Below is the new feature method it is passed as the 'onKeyDown' attribute to
-    <input /> */
-    searchWithEnter(event){
-        if(event.keyCode === 13){
-            this.search();
-        }
-    }
+  render() {
+    return (
+      <div className="search-bar">
+        <input
+          placeholder="Enter A Song, Album, or Artist"
+          onChange={this.handleTermChange}
+          onKeyDown={this.searchWithEnter}
+        />
 
-    search(){
-        this.props.onSearch(this.state.term);
-    }
+        <button
+          type="button"
+          className="search-bar__button"
+          onClick={this.search}
+        >
+        SEARCH
+        </button>
 
-    render () {
+      </div>
+    );
+  }
+}
 
+export default SearchBar;
 
-        return (
-            <div className="search-bar"> {/*an block level element*/}
-                <input 
-                placeholder="Enter A Song, Album, or Artist"
-                onChange={this.handleTermChange} 
-                onKeyDown={this.searchWithEnter}/>
-                <a className="search-bar__button" onClick={this.search}>SEARCH</a>
-            </div>
-        );
-    }
-};
+// SearchBar.propTypes = {
+//   onSearch: PropTypes.func,
+// };
+
+// SearchBar.defaultProps = {
+//   onSearch: SearchBar.props.onSearch,
+// };
