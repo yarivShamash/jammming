@@ -10,19 +10,15 @@ class SearchBar extends React.Component {
     this.state = {
       term: '',
     };
-
-    this.search = this.search.bind(this);
-    this.handleTermChange = this.handleTermChange.bind(this);
-    this.searchWithEnter = this.searchWithEnter.bind(this);
   }
 
-  handleTermChange(e) {
+  handleTermChange = e => {
     this.setState({
       term: e.target.value,
     });
   }
 
-  search() {
+  search = () => {
     const {
       onSearch,
     } = this.props;
@@ -34,7 +30,7 @@ class SearchBar extends React.Component {
     onSearch(term);
   }
 
-  searchWithEnter(event) {
+  searchWithEnter = event => {
     if (event.keyCode === 13) {
       this.search();
     }

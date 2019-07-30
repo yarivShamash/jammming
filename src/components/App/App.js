@@ -17,11 +17,6 @@ class App extends React.Component {
       hasLoggedIn: false,
     };
 
-    this.addTrack = this.addTrack.bind(this);
-    this.removeTrack = this.removeTrack.bind(this);
-    this.updatePlaylistName = this.updatePlaylistName.bind(this);
-    this.savePlaylist = this.savePlaylist.bind(this);
-    this.search = this.search.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +30,7 @@ class App extends React.Component {
     }
   }
 
-  addTrack(track) {
+  addTrack = track => {
     const { playlistTracks } = this.state;
 
     const hasTrack = playlistTracks.find(savedTrack => savedTrack.id === track.id);
@@ -49,7 +44,7 @@ class App extends React.Component {
     });
   }
 
-  removeTrack(track) {
+  removeTrack = track => {
     const { playlistTracks } = this.state;
 
     const filteredTracks = playlistTracks.filter(item => item.id !== track.id);
@@ -58,13 +53,13 @@ class App extends React.Component {
     });
   }
 
-  updatePlaylistName(name) {
+  updatePlaylistName = name => {
     this.setState({
       playlistName: name,
     });
   }
 
-  savePlaylist() {
+  savePlaylist = () => {
     const {
       playlistTracks,
       playlistName,
@@ -79,7 +74,7 @@ class App extends React.Component {
     });
   }
 
-  search(searchTerm) {
+  search = searchTerm => {
     Spotify.search(searchTerm).then(
       (tracks) => {
         this.setState({
