@@ -4,7 +4,7 @@ import WellcomeScreen from '../WellcomeScreen/WellcomeScreen';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
-import Spotify from '../../util/Spotify';
+import SpotifyUtil from '../../util/Spotify';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,21 +16,20 @@ class App extends React.Component {
       playlistTracks: [],
       hasLoggedIn: false,
     };
-
   }
 
   componentDidMount() {
     let { hasLoggedIn } = this.state;
 
     if (!hasLoggedIn) {
-      hasLoggedIn = Spotify.getUserAccessToken();
+      hasLoggedIn = SpotifyUtil.getUserAccessToken();
       this.setState({
         hasLoggedIn,
       });
     }
   }
 
-  addTrack = track => {
+  addTrack = (track) => {
     const { playlistTracks } = this.state;
 
     const hasTrack = playlistTracks.find(savedTrack => savedTrack.id === track.id);
@@ -44,7 +43,7 @@ class App extends React.Component {
     });
   }
 
-  removeTrack = track => {
+  removeTrack = (track) => {
     const { playlistTracks } = this.state;
 
     const filteredTracks = playlistTracks.filter(item => item.id !== track.id);
@@ -53,7 +52,7 @@ class App extends React.Component {
     });
   }
 
-  updatePlaylistName = name => {
+  updatePlaylistName = (name) => {
     this.setState({
       playlistName: name,
     });
@@ -66,7 +65,7 @@ class App extends React.Component {
     } = this.state;
     const tracksURI = playlistTracks.map(track => track.uri);
 
-    Spotify.savePlaylist(playlistName, tracksURI).then(() => {
+    SpotifyUtil.savePlaylist(playlistName, tracksURI).then(() => {
       this.setState({
         playlistName: 'New Playlist', /* Resetting the playlist name */
         playlistTracks: [], /* Resetting playlist Tracks */
@@ -74,8 +73,8 @@ class App extends React.Component {
     });
   }
 
-  search = searchTerm => {
-    Spotify.search(searchTerm).then(
+  search = (searchTerm) => {
+    SpotifyUtil.search(searchTerm).then(
       (tracks) => {
         this.setState({
           searchResults: tracks,
@@ -103,7 +102,7 @@ class App extends React.Component {
           </h1>
 
           <div className="app">
-            
+
             <WellcomeScreen />
 
             <SearchBar

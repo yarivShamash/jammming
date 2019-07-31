@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Track from '../Track/Track';
 import './TrackList.css';
 
@@ -35,9 +34,9 @@ export default TrackList;
 TrackList.propTypes = {
   tracks: PropTypes.arrayOf(
     PropTypes.objectOf(
-      PropTypes.string
-    )
-  ),
+      PropTypes.string,
+    ),
+  ).isRequired,
   onAdd: PropTypes.func,
   onRemove: PropTypes.func,
   isRemoval: PropTypes.bool.isRequired,

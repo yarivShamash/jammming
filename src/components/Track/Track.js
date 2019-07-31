@@ -1,13 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import './Track.css';
 
 
 class Track extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   addTrack = () => {
     const {
       onAdd,
@@ -29,7 +25,7 @@ class Track extends React.Component {
   render() {
     const {
       trackInfo,
-      isRemoval,  
+      isRemoval,
     } = this.props;
 
 
@@ -75,7 +71,7 @@ Track.propTypes = {
   onAdd: PropTypes.func,
   onRemove: PropTypes.func,
   trackInfo: PropTypes.PropTypes.objectOf(
-    PropTypes.string
+    PropTypes.string,
   ).isRequired,
   isRemoval: PropTypes.bool.isRequired,
 };
