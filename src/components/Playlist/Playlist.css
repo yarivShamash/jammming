@@ -1,16 +1,17 @@
-.Playlist {
+.playlist {
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: scroll;
     width: 37%;
+    height: 450px;
     max-height: 950px;
     padding: 2.27rem 1.16rem;
     background-color: rgba(1, 12, 63, 0.7);
     box-shadow: 0 4px 2px 2px #000000;
   }
   
-  .Playlist input {
+  .playlist input {
     width: 100%;
     border: 0;
     outline: 0;
@@ -21,7 +22,7 @@
     color: #fff;
   }
   
-  .Playlist-save {
+  .playlist__button {
     cursor: pointer;
     width: 10rem;
     padding: .77rem 0;
@@ -33,7 +34,7 @@
     transition: background-color .25s;
   }
   
-  .Playlist-save:hover {
+  .playlist__button:hover {
     background-color: rgba(108, 65, 233, .7);
   }
   
@@ -43,7 +44,7 @@
   }
   
   @media only screen and (max-width: 1020px) {
-    .Playlist {
+    .playlist {
       width: 90%;
     }
   }

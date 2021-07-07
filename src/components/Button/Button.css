@@ -1,0 +1,40 @@
+.start-jammming {
+    position: absolute;
+    top: 4rem;
+    left: 15%;
+    background-color: rgba(250, 250, 250, 0.95);
+    border: 0.25rem solid grey;
+    border-radius: 54px;
+    height: 28.5rem;
+    width: 50rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .start-jammming h1 {
+    color: black;
+    font-size: 4rem;
+    margin-bottom: 5rem;
+    padding: 0.5rem 0;
+    border-radius: 54px;
+    background-color:  transparent;
+    text-align: center;
+  }
+
+  .start-jammming a {
+    cursor: pointer;
+    width: 14rem;
+    height: 4rem;
+    padding: 1rem 0;
+    border-radius: 54px;
+    background-color: rgba(0, 165, 50, .7);
+    text-align: center;
+    font-size: 2rem;
+    transition: background-color .25s;
+  }
+  
+  .start-jammming a:hover {
+    background-color: rgba(108, 65, 233, .7);
+  }

@@ -15,8 +15,8 @@ export class SearchResults extends React.Component{
         } = this.props;
 
         return (
-            <div className="SearchResults">
-                <h2>Results</h2>
+            <div className="search-results"> {/*a block level element */}
+                <h2 className="search-results__heading">Results</h2>
                 
                 <TrackList 
                     tracks={searchResults} 

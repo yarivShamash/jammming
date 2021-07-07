@@ -2,12 +2,11 @@ import React from "react";
 
 import './App.css';
 
+import {Button} from '../Button/Button';
 import {SearchBar} from '../SearchBar/SearchBar';
 import {SearchResults} from '../SearchResults/SearchResults';
 import {Playlist} from '../Playlist/Playlist';
-import {Spotify} from '../../util/Spotify'
-
-// Spotify.getUserAccessToken();
+import {userAccessToken, Spotify} from '../../util/Spotify';
 
 export class App extends React.Component {
 
@@ -17,7 +16,8 @@ export class App extends React.Component {
         this.state = {
             searchResults: [],
             playlistName: 'New Playlist',
-            playlistTracks: []
+            playlistTracks: [],
+            hasLoggedIn: false,
         }
 
         this.addTrack = this.addTrack.bind(this);
@@ -27,6 +27,19 @@ export class App extends React.Component {
         this.search = this.search.bind(this);
     }
 
+    componentDidMount() {
+        const { hasLoggedIn } = this.state
+        
+        if (!hasLoggedIn) {
+        //   console.log(`Button's userAccessToken before calling the fn: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`)
+          const hasLoggedIn = Spotify.getUserAccessToken()
+          this.setState({
+            hasLoggedIn,
+          });
+        //   console.log(`Button's userAccessToken after calling the fn: ${userAccessToken ? 'holds the access token' : 'Empty as a bucket'}`);
+  
+        } 
+      };
     
     addTrack(track){
 
@@ -74,45 +87,73 @@ operator, the meaning of the code is keep 'this.state.playlistTracks' and add 't
         });/*Saving the new Playlist to Spotify */ 
     }
 
-
     search(searchTerm){
         
         Spotify.search(searchTerm).then(
-            tracks => {this.setState({
+            tracks => {
+                this.setState({
                 searchResults: tracks
-            })});
-        
-        /*const results = Spotify.search(searchTerm);
-        this.setState({
-            searchResults: results
-        });
-        console.log(results);
-        it did not work..*/
+            })
+          }
+        );
     }
+
 
     render() {
 
         const {
             searchResults,
             playlistName,
-            playlistTracks
+            playlistTracks,
+            hasLoggedIn,
         } = this.state;
+        
+        if(!hasLoggedIn){ 
+            // console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So only Button is renderd`); // I used this to see if the accesss token does exist at this stage
+            return (
+                <div>
+                     <h1>Ja<span className="highlight">mmm</span>ing</h1>
+                
+                    <div className="app"> {/*a block level element*/}
+                   
+                      <Button />
+
+                      <SearchBar 
+                        onSearch={this.search}/>
+
+                    <div className="app-playlist">
+                    
+                        <SearchResults 
+                            searchResults={searchResults} 
+                            onAdd={this.addTrack}
+                            />
+                        
+                        <Playlist 
+                            playlistName={playlistName} 
+                            playlistTracks={playlistTracks}
+                            onRemove={this.removeTrack}
+                            onNameChange={this.updatePlaylistName}
+                            onSave={this.savePlaylist}/>
+
+                        </div>
+                    </div>
+                </div>
+            )
+        };
+
+        // console.log(`App.js userAccessToken is ${userAccessToken ? userAccessToken : `Very Empty :(`} So we can proceed`); // I used this to see if the accesss token does exist at this stage
 
         return (
             <div>
 
-                {alert('Welcome to Jammming, the Spotify Playlist Maker App! To use this App first press the "Start Jammming" button twice.. \n ..and enjoy Playlisting :)')}
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 
-                <div className="App">
-                    <div className="Start-Jammming">
-                        <a onClick={Spotify.getUserAccessToken}>Start Jammming!</a>
-                    </div>
-                    
+                <div className="app"> {/*a block level element*/}
+                   
                     <SearchBar 
                         onSearch={this.search}/>
 
-                    <div className="App-playlist">
+                    <div className="app-playlist">
                     
                         <SearchResults 
                             searchResults={searchResults} 
